@@ -1,0 +1,54 @@
+header-from: main.tf
+
+formatter: "markdown table"
+
+sort:
+  enabled: true
+  by: required
+
+content: |
+  {{ .Header }}
+
+  {{ .Requirements }}
+
+  # Examples
+  Use the examples folder and add as many examples you want. have in mind that you must use the following syntax to see each file content: 
+
+
+  ``` hcl
+    {{ include "examples/01-example.tf" }}
+  ```
+  
+  If you need to create more examples create new `include` blocks
+
+  {{ .Inputs }}
+
+  {{ .Outputs }}
+
+  {{ .Resources }}
+
+  ## How to create a documentation for the environent
+  To create a README file simply use the command:
+  ``` shell
+    make prepare-readme
+  ```
+
+  ## Wish to contribute?
+
+  You must install [**terraform-docs**](https://terraform-docs.io/user-guide/installation/).
+  Steps: 
+    * Clone this reop;
+    * Create a branch;
+    * Make all modifications you want;
+    * Create a documentation `make prepare-readme`;
+    * Commit your changes;
+    * Create a tag (v1.1.0, v1.2.3, etc), push your branch and raise a Pull Request.
+
+  <sub>For any questions simply reach me: [antonio.junior@solonetwork.com.br](mailto:antonio.junior@solonetwork.com.br)</sub>
+
+settings:
+  color: true
+  default: true
+  description: true
+  sensitive: true
+  type: true

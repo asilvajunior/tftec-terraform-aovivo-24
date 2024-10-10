@@ -1,0 +1,38 @@
+---
+stages:        
+- stage: CD_Stage
+  variables:
+    - group: vervit-vars
+  displayName: Continuous Deployment
+  jobs:  
+  - job: Apply
+    displayName: Deploy dos Recursos no Ambiente Real
+    steps:
+      - task: TerraformCLI@0
+        displayName: Terraform Init
+        inputs:
+          command: 'init'
+          workingDirectory: '$(System.DefaultWorkingDirectory)/stacks/vervit'
+          commandOptions: '-reconfigure'
+          backendType: 'azurerm'
+          backendServiceArm: 'vervit-devops'
+          backendAzureRmResourceGroupName: '$(TF-BACKEND-RESOURCE-GROUP)'
+          backendAzureRmStorageAccountName: '$(TF-BACKEND-STORAGE-ACCOUNT)'
+          backendAzureRmContainerName: '$(TF-BACKEND-CONTAINER)'
+          backendAzureRmKey: '$(TF-BACKEND-KEY)'
+          allowTelemetryCollection: true
+      - task: TerraformCLI@0
+        displayName: Seleciona Workspace
+        inputs:
+          command: workspace
+          workingDirectory: '$(System.DefaultWorkingDirectory)/stacks/vervit'
+          workspaceSubCommand: select
+          workspaceName: prod
+      - task: TerraformCLI@0
+        displayName: Terraform Apply
+        inputs:
+          command: 'apply'
+          environmentServiceName: 'vervit-devops'
+          workingDirectory: '$(System.DefaultWorkingDirectory)/stacks/vervit'
+          commandOptions: '--var-file="../env/prod/prod.tfvars"'
+          allowTelemetryCollection: true        

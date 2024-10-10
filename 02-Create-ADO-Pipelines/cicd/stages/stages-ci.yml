@@ -1,0 +1,107 @@
+---
+stages:
+- stage: CI_Stage
+  variables:
+    - group: vervit-vars
+  displayName: Continuous Integration
+  jobs:
+  - job: Terraform_Init
+    displayName: Teste de Inicialização Terraform
+    steps:
+     - task: TerraformCLI@0
+       displayName: Terraform init
+       inputs:
+         command: 'init'
+         workingDirectory: '$(System.DefaultWorkingDirectory)/stacks/vervit'
+         commandOptions: '-reconfigure'
+         backendType: 'azurerm'
+         backendServiceArm: 'vervit-devops'
+         backendAzureRmResourceGroupName: '$(TF-BACKEND-RESOURCE-GROUP)'
+         backendAzureRmStorageAccountName: '$(TF-BACKEND-STORAGE-ACCOUNT)'
+         backendAzureRmContainerName: '$(TF-BACKEND-CONTAINER)'
+         backendAzureRmKey: '$(TF-BACKEND-KEY)'
+         allowTelemetryCollection: true
+
+  - job: Terraform_Validate
+    dependsOn: Terraform_Init
+    displayName: Validação do Código
+    steps:
+     - task: TerraformCLI@0
+       displayName: Terraform Init
+       inputs:
+         command: 'init'
+         workingDirectory: '$(System.DefaultWorkingDirectory)/stacks/vervit'
+         commandOptions: '-reconfigure'
+         backendType: 'azurerm'
+         backendServiceArm: 'vervit-devops'
+         backendAzureRmResourceGroupName: '$(TF-BACKEND-RESOURCE-GROUP)'
+         backendAzureRmStorageAccountName: '$(TF-BACKEND-STORAGE-ACCOUNT)'
+         backendAzureRmContainerName: '$(TF-BACKEND-CONTAINER)'
+         backendAzureRmKey: '$(TF-BACKEND-KEY)'
+         allowTelemetryCollection: true
+     - task: TerraformCLI@0
+       displayName: Terraform Validate
+       inputs:
+         command: 'validate'
+         workingDirectory: '$(System.DefaultWorkingDirectory)/stacks/vervit'
+         allowTelemetryCollection: true
+     - task: TerraformCLI@0
+       displayName: Terraform Format
+       inputs:
+         command: 'fmt'
+         wworkingDirectory: '$(System.DefaultWorkingDirectory)/stacks/vervit'
+         commandOptions: '-check -diff'
+         allowTelemetryCollection: true
+
+  - job: Terraform_Plan
+    dependsOn: Terraform_Validate
+    displayName: Planejamento do Deploy
+    steps:
+     - task: TerraformCLI@0
+       displayName: Terraform Init
+       inputs:
+         command: 'init'
+         workingDirectory: '$(System.DefaultWorkingDirectory)/stacks/vervit'
+         commandOptions: '-reconfigure'
+         backendType: 'azurerm'
+         backendServiceArm: 'vervit-devops'
+         backendAzureRmResourceGroupName: '$(TF-BACKEND-RESOURCE-GROUP)'
+         backendAzureRmStorageAccountName: '$(TF-BACKEND-STORAGE-ACCOUNT)'
+         backendAzureRmContainerName: '$(TF-BACKEND-CONTAINER)'
+         backendAzureRmKey: '$(TF-BACKEND-KEY)'
+         allowTelemetryCollection: true 
+     - task: TerraformCLI@0
+       displayName: Seleciona Workspace
+       inputs:
+         command: workspace
+         workingDirectory: '$(System.DefaultWorkingDirectory)/stacks/vervit'
+         workspaceSubCommand: select
+         workspaceName: prod
+     - task: TerraformCLI@0
+       displayName: Terraform Plan
+       inputs:
+         command: 'plan'
+         workingDirectory: '$(System.DefaultWorkingDirectory)/stacks/vervit'
+         environmentServiceName: 'vervit-devops'
+         commandOptions: '-out=main.tfplan -var-file=../env/prod/prod.tfvars'
+         allowTelemetryCollection: true
+         publishPlanResults: 'Terraform Plan' 
+
+- stage: Validation
+  dependsOn: "CI_Stage"
+  displayName: "Approval Gates"
+  variables:
+    - group: vervit-vars
+  jobs: 
+  - job: EsperaPorValidacao
+    displayName: "Esperando aprovação manual"
+    pool: "server"
+    timeoutInMinutes: "4320" # job times out in 3 days
+    steps:
+    - task: ManualValidation@0
+      timeoutInMinutes: 1440 # task times out in 1 day
+      inputs:
+        notifyUsers: |
+          antonio.junior@solonetwork.com.br
+        instructions: "Pode haver recursos sendo destruídos como parte desta implantação, revise a saída do plano Terraform antes de aprovar."
+        onTimeout: "reject"
