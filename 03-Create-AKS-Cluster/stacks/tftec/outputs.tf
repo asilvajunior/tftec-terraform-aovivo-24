@@ -4,14 +4,6 @@ output "aks_rg_name" {
   value = azurerm_resource_group.aks_rg.name
 }
 
-output "storage_rg_name" {
-  value = azurerm_resource_group.storage_rg.name
-}
-
-output "database_rg_name" {
-  value = azurerm_resource_group.database_rg.name
-}
-
 output "network_rg_name" {
   value = azurerm_resource_group.network_rg.name
 }
@@ -77,32 +69,3 @@ output "kube_config_raw" {
 output "identity" {
   value = module.aks.identity
 }
-
-# APPSERVICE Outputs
-
-output "app_service_plan_id" {
-  value = module.appservice.app_service_plan_id
-}
-
-output "app_service_id" {
-  value = module.appservice.app_service_id
-}
-
-output "application_insights_id" {
-  value = module.appservice.application_insights_id
-}
-
-output "application_insights_app_id" {
-  value = module.appservice.application_insights_app_id
-}
-
-output "application_insights_instrumentation_key" {
-  value     = module.appservice.application_insights_instrumentation_key
-  sensitive = true
-}
-
-output "application_insights_connection_string" {
-  value     = module.appservice.application_insights_connection_string
-  sensitive = true
-}
-

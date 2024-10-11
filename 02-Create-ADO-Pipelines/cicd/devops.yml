@@ -21,7 +21,7 @@ stages:
     jobs: 
     - job: CIvalidation
     variables:
-    - group: vervit-vars
+    - group: tftec-vars
   - template: stages/stages-ci.yml
 
 
@@ -31,5 +31,5 @@ stages:
     jobs: 
     - job: "CD"
     variables:
-    - group: vervit-vars
+    - group: tftec-vars
   - template: stages/stages-cd.yml

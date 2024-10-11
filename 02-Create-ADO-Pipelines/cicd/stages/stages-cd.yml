@@ -2,7 +2,7 @@
 stages:        
 - stage: CD_Stage
   variables:
-    - group: vervit-vars
+    - group: tftec-vars
   displayName: Continuous Deployment
   jobs:  
   - job: Apply
@@ -12,10 +12,10 @@ stages:
         displayName: Terraform Init
         inputs:
           command: 'init'
-          workingDirectory: '$(System.DefaultWorkingDirectory)/stacks/vervit'
+          workingDirectory: '$(System.DefaultWorkingDirectory)/stacks/tftec'
           commandOptions: '-reconfigure'
           backendType: 'azurerm'
-          backendServiceArm: 'vervit-devops'
+          backendServiceArm: 'tftec-devops'
           backendAzureRmResourceGroupName: '$(TF-BACKEND-RESOURCE-GROUP)'
           backendAzureRmStorageAccountName: '$(TF-BACKEND-STORAGE-ACCOUNT)'
           backendAzureRmContainerName: '$(TF-BACKEND-CONTAINER)'
@@ -25,14 +25,14 @@ stages:
         displayName: Seleciona Workspace
         inputs:
           command: workspace
-          workingDirectory: '$(System.DefaultWorkingDirectory)/stacks/vervit'
+          workingDirectory: '$(System.DefaultWorkingDirectory)/stacks/tftec'
           workspaceSubCommand: select
           workspaceName: prod
       - task: TerraformCLI@0
         displayName: Terraform Apply
         inputs:
           command: 'apply'
-          environmentServiceName: 'vervit-devops'
-          workingDirectory: '$(System.DefaultWorkingDirectory)/stacks/vervit'
+          environmentServiceName: 'tftec-devops'
+          workingDirectory: '$(System.DefaultWorkingDirectory)/stacks/tftec'
           commandOptions: '--var-file="../env/prod/prod.tfvars"'
           allowTelemetryCollection: true        

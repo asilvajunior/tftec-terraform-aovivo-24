@@ -2,7 +2,7 @@
 stages:
 - stage: CI_Stage
   variables:
-    - group: vervit-vars
+    - group: tftec-vars
   displayName: Continuous Integration
   jobs:
   - job: Terraform_Init
@@ -12,10 +12,10 @@ stages:
        displayName: Terraform init
        inputs:
          command: 'init'
-         workingDirectory: '$(System.DefaultWorkingDirectory)/stacks/vervit'
+         workingDirectory: '$(System.DefaultWorkingDirectory)/stacks/tftec'
          commandOptions: '-reconfigure'
          backendType: 'azurerm'
-         backendServiceArm: 'vervit-devops'
+         backendServiceArm: 'tftec-devops'
          backendAzureRmResourceGroupName: '$(TF-BACKEND-RESOURCE-GROUP)'
          backendAzureRmStorageAccountName: '$(TF-BACKEND-STORAGE-ACCOUNT)'
          backendAzureRmContainerName: '$(TF-BACKEND-CONTAINER)'
@@ -30,10 +30,10 @@ stages:
        displayName: Terraform Init
        inputs:
          command: 'init'
-         workingDirectory: '$(System.DefaultWorkingDirectory)/stacks/vervit'
+         workingDirectory: '$(System.DefaultWorkingDirectory)/stacks/tftec'
          commandOptions: '-reconfigure'
          backendType: 'azurerm'
-         backendServiceArm: 'vervit-devops'
+         backendServiceArm: 'tftec-devops'
          backendAzureRmResourceGroupName: '$(TF-BACKEND-RESOURCE-GROUP)'
          backendAzureRmStorageAccountName: '$(TF-BACKEND-STORAGE-ACCOUNT)'
          backendAzureRmContainerName: '$(TF-BACKEND-CONTAINER)'
@@ -43,13 +43,13 @@ stages:
        displayName: Terraform Validate
        inputs:
          command: 'validate'
-         workingDirectory: '$(System.DefaultWorkingDirectory)/stacks/vervit'
+         workingDirectory: '$(System.DefaultWorkingDirectory)/stacks/tftec'
          allowTelemetryCollection: true
      - task: TerraformCLI@0
        displayName: Terraform Format
        inputs:
          command: 'fmt'
-         wworkingDirectory: '$(System.DefaultWorkingDirectory)/stacks/vervit'
+         wworkingDirectory: '$(System.DefaultWorkingDirectory)/stacks/tftec'
          commandOptions: '-check -diff'
          allowTelemetryCollection: true
 
@@ -61,10 +61,10 @@ stages:
        displayName: Terraform Init
        inputs:
          command: 'init'
-         workingDirectory: '$(System.DefaultWorkingDirectory)/stacks/vervit'
+         workingDirectory: '$(System.DefaultWorkingDirectory)/stacks/tftec'
          commandOptions: '-reconfigure'
          backendType: 'azurerm'
-         backendServiceArm: 'vervit-devops'
+         backendServiceArm: 'tftec-devops'
          backendAzureRmResourceGroupName: '$(TF-BACKEND-RESOURCE-GROUP)'
          backendAzureRmStorageAccountName: '$(TF-BACKEND-STORAGE-ACCOUNT)'
          backendAzureRmContainerName: '$(TF-BACKEND-CONTAINER)'
@@ -74,15 +74,15 @@ stages:
        displayName: Seleciona Workspace
        inputs:
          command: workspace
-         workingDirectory: '$(System.DefaultWorkingDirectory)/stacks/vervit'
+         workingDirectory: '$(System.DefaultWorkingDirectory)/stacks/tftec'
          workspaceSubCommand: select
          workspaceName: prod
      - task: TerraformCLI@0
        displayName: Terraform Plan
        inputs:
          command: 'plan'
-         workingDirectory: '$(System.DefaultWorkingDirectory)/stacks/vervit'
-         environmentServiceName: 'vervit-devops'
+         workingDirectory: '$(System.DefaultWorkingDirectory)/stacks/tftec'
+         environmentServiceName: 'tftec-devops'
          commandOptions: '-out=main.tfplan -var-file=../env/prod/prod.tfvars'
          allowTelemetryCollection: true
          publishPlanResults: 'Terraform Plan' 
@@ -91,7 +91,7 @@ stages:
   dependsOn: "CI_Stage"
   displayName: "Approval Gates"
   variables:
-    - group: vervit-vars
+    - group: tftec-vars
   jobs: 
   - job: EsperaPorValidacao
     displayName: "Esperando aprovação manual"
