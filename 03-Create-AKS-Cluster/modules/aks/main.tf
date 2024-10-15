@@ -41,19 +41,19 @@ resource "azurerm_kubernetes_cluster" "aks" {
 
   default_node_pool {
 
-    name                   = var.name_pool
-    zones                  = var.node_av_zone
-    type                   = var.agents_type
-    vm_size                = var.vm_size
-    os_sku                 = var.os_sku
-    auto_scaling_enabled   = var.auto_scaling_enabled
-    max_count              = var.auto_scaling_enabled == true ? lookup(var.default_node_settings, "max_count", null) : null
-    min_count              = var.auto_scaling_enabled == true ? lookup(var.default_node_settings, "min_count", null) : null
-    node_count             = lookup(var.default_node_settings, "node_count", var.node_vm_count)
-    node_labels            = var.node_labels
-    os_disk_size_gb        = var.node_vm_disk_size
-    ultra_ssd_enabled      = var.ultra_ssd_enabled
-    vnet_subnet_id         = data.azurerm_subnet.aks_node.id
+    name                 = var.name_pool
+    zones                = var.node_av_zone
+    type                 = var.agents_type
+    vm_size              = var.vm_size
+    os_sku               = var.os_sku
+    auto_scaling_enabled = var.auto_scaling_enabled
+    max_count            = var.auto_scaling_enabled == true ? lookup(var.default_node_settings, "max_count", null) : null
+    min_count            = var.auto_scaling_enabled == true ? lookup(var.default_node_settings, "min_count", null) : null
+    node_count           = lookup(var.default_node_settings, "node_count", var.node_vm_count)
+    node_labels          = var.node_labels
+    os_disk_size_gb      = var.node_vm_disk_size
+    ultra_ssd_enabled    = var.ultra_ssd_enabled
+    vnet_subnet_id       = data.azurerm_subnet.aks_node.id
   }
 
   dynamic "azure_active_directory_role_based_access_control" {
@@ -65,7 +65,7 @@ resource "azurerm_kubernetes_cluster" "aks" {
       tenant_id              = var.rbac_aad_tenant_id
     }
   }
-  
+
   dynamic "service_principal" {
     for_each = var.is_identity_enabled ? [] : [1]
     content {
@@ -94,11 +94,11 @@ resource "azurerm_kubernetes_cluster" "aks" {
   }
 
   network_profile {
-    network_plugin     = var.network_plugin
-    load_balancer_sku  = var.lb_sku
-    network_policy     = var.network_policy
-    service_cidr       = var.aks_network_cidr
-    dns_service_ip     = var.aks_dns_ip
+    network_plugin    = var.network_plugin
+    load_balancer_sku = var.lb_sku
+    network_policy    = var.network_policy
+    service_cidr      = var.aks_network_cidr
+    dns_service_ip    = var.aks_dns_ip
   }
 }
 
@@ -134,7 +134,7 @@ resource "azurerm_role_assignment" "attach_acr" {
   count = var.enable_attach_acr ? 1 : 0
 
   scope                            = var.acr_id
-  role_definition_name              = "AcrPull"
+  role_definition_name             = "AcrPull"
   principal_id                     = azurerm_kubernetes_cluster.aks.kubelet_identity[0].object_id
   skip_service_principal_aad_check = true
 }

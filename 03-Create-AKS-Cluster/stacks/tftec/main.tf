@@ -184,17 +184,17 @@ module "aks" {
   tags                = merge(var.global_tags, var.aks_tags)
 
   # Default Node Configuration
-  name_pool              = var.name_pool
-  node_av_zone           = var.aks_node_av_zone
-  agents_type            = var.agents_type
-  vm_size                = var.vm_size
-  os_sku                 = var.os_sku
-  auto_scaling_enabled   = var.auto_scaling_enabled
-  default_node_settings  = var.aks_default_node_settings
-  max_pods               = var.aks_max_pods
-  node_labels            = var.node_labels
-  node_vm_disk_size      = var.aks_node_vm_disk_size
-  ultra_ssd_enabled      = var.ultra_ssd_enabled
+  name_pool             = var.name_pool
+  node_av_zone          = var.aks_node_av_zone
+  agents_type           = var.agents_type
+  vm_size               = var.vm_size
+  os_sku                = var.os_sku
+  auto_scaling_enabled  = var.auto_scaling_enabled
+  default_node_settings = var.aks_default_node_settings
+  max_pods              = var.aks_max_pods
+  node_labels           = var.node_labels
+  node_vm_disk_size     = var.aks_node_vm_disk_size
+  ultra_ssd_enabled     = var.ultra_ssd_enabled
 
   # Additional Node Configuration
   node_name             = var.aks_node_name
@@ -215,7 +215,7 @@ module "aks" {
   aks_network_cidr                 = var.default_aks_network_cidr
   node_subnet                      = var.aks_node_subnet
   aks_dns_ip                       = var.default_aks_dns_ip
-  dns_prefix                        = var.dns_prefix
+  dns_prefix                       = var.dns_prefix
   lb_sku                           = var.lb_sku
   http_application_routing_enabled = var.http_application_routing_enabled
   network_policy                   = var.network_policy
