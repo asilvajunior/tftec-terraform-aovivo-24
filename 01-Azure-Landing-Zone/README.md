@@ -12,3 +12,7 @@ Access and follow this how-to:
 
 - [Landing Zone Terraform Creation Steps - Lunix Way](https://github.com/asilvajunior/tftec-terraform-aovivo-24/blob/main/01-Azure-Landing-Zone/Landing_Zone_IAC_LNX.txt)
 - [Landing Zone Terraform Creation Steps - Windows Way](https://github.com/asilvajunior/tftec-terraform-aovivo-24/blob/main/01-Azure-Landing-Zone/Landing_Zone_IAC_WIN.txt)
+
+## :memo: License
+
+This project is under [MIT License](./LICENSE).
