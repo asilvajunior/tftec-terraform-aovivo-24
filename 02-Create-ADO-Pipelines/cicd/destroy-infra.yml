@@ -1,12 +1,11 @@
----
 stages:        
-- stage: CD_Stage
+- stage: Destroy_Stage
   variables:
     - group: tftec-vars
-  displayName: Continuous Deployment
+  displayName: Destruição da Infraestrutura
   jobs:  
-  - job: Apply
-    displayName: Deploy dos Recursos no Ambiente Real
+  - job: Destroy
+    displayName: Destroy dos Recursos no Ambiente Real
     steps:
       - task: TerraformCLI@0
         displayName: Terraform Init
@@ -21,6 +20,7 @@ stages:
           backendAzureRmContainerName: '$(TF-BACKEND-CONTAINER)'
           backendAzureRmKey: '$(TF-BACKEND-KEY)'
           allowTelemetryCollection: true
+
       - task: TerraformCLI@0
         displayName: Seleciona Workspace
         inputs:
@@ -28,11 +28,21 @@ stages:
           workingDirectory: '$(System.DefaultWorkingDirectory)/03-Create-AKS-Cluster/stacks/tftec'
           workspaceSubCommand: select
           workspaceName: live
+
       - task: TerraformCLI@0
-        displayName: Terraform Apply
+        displayName: Terraform Plan (Destroy)
+        inputs:
+          command: 'plan'
+          environmentServiceName: 'tftec-devops'
+          workingDirectory: '$(System.DefaultWorkingDirectory)/03-Create-AKS-Cluster/stacks/tftec'
+          commandOptions: '-destroy --var-file="../env/aovivo-sp-24/aovivosp24.tfvars"'
+          allowTelemetryCollection: true
+
+      - task: TerraformCLI@0
+        displayName: Terraform Apply (Destroy)
         inputs:
           command: 'apply'
           environmentServiceName: 'tftec-devops'
           workingDirectory: '$(System.DefaultWorkingDirectory)/03-Create-AKS-Cluster/stacks/tftec'
-          commandOptions: '--var-file="../env/aovivo-sp-24/aovivosp24.tfvars"'
-          allowTelemetryCollection: true        
+          commandOptions: '-destroy -auto-approve --var-file="../env/aovivo-sp-24/aovivosp24.tfvars"'
+          allowTelemetryCollection: true

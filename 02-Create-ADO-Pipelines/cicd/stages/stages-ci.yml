@@ -8,84 +8,84 @@ stages:
   - job: Terraform_Init
     displayName: Teste de Inicialização Terraform
     steps:
-     - task: TerraformCLI@0
-       displayName: Terraform init
-       inputs:
-         command: 'init'
-         workingDirectory: '$(System.DefaultWorkingDirectory)/stacks/tftec'
-         commandOptions: '-reconfigure'
-         backendType: 'azurerm'
-         backendServiceArm: 'tftec-devops'
-         backendAzureRmResourceGroupName: '$(TF-BACKEND-RESOURCE-GROUP)'
-         backendAzureRmStorageAccountName: '$(TF-BACKEND-STORAGE-ACCOUNT)'
-         backendAzureRmContainerName: '$(TF-BACKEND-CONTAINER)'
-         backendAzureRmKey: '$(TF-BACKEND-KEY)'
-         allowTelemetryCollection: true
+      - task: TerraformCLI@0
+        displayName: Terraform init
+        inputs:
+          command: 'init'
+          workingDirectory: '$(System.DefaultWorkingDirectory)/03-Create-AKS-Cluster/stacks/tftec'
+          commandOptions: '-reconfigure'
+          backendType: 'azurerm'
+          backendServiceArm: 'tftec-devops'
+          backendAzureRmResourceGroupName: '$(TF-BACKEND-RESOURCE-GROUP)'
+          backendAzureRmStorageAccountName: '$(TF-BACKEND-STORAGE-ACCOUNT)'
+          backendAzureRmContainerName: '$(TF-BACKEND-CONTAINER)'
+          backendAzureRmKey: '$(TF-BACKEND-KEY)'
+          allowTelemetryCollection: true
 
   - job: Terraform_Validate
     dependsOn: Terraform_Init
     displayName: Validação do Código
     steps:
-     - task: TerraformCLI@0
-       displayName: Terraform Init
-       inputs:
-         command: 'init'
-         workingDirectory: '$(System.DefaultWorkingDirectory)/stacks/tftec'
-         commandOptions: '-reconfigure'
-         backendType: 'azurerm'
-         backendServiceArm: 'tftec-devops'
-         backendAzureRmResourceGroupName: '$(TF-BACKEND-RESOURCE-GROUP)'
-         backendAzureRmStorageAccountName: '$(TF-BACKEND-STORAGE-ACCOUNT)'
-         backendAzureRmContainerName: '$(TF-BACKEND-CONTAINER)'
-         backendAzureRmKey: '$(TF-BACKEND-KEY)'
-         allowTelemetryCollection: true
-     - task: TerraformCLI@0
-       displayName: Terraform Validate
-       inputs:
-         command: 'validate'
-         workingDirectory: '$(System.DefaultWorkingDirectory)/stacks/tftec'
-         allowTelemetryCollection: true
-     - task: TerraformCLI@0
-       displayName: Terraform Format
-       inputs:
-         command: 'fmt'
-         wworkingDirectory: '$(System.DefaultWorkingDirectory)/stacks/tftec'
-         commandOptions: '-check -diff'
-         allowTelemetryCollection: true
+      - task: TerraformCLI@0
+        displayName: Terraform Init
+        inputs:
+          command: 'init'
+          workingDirectory: '$(System.DefaultWorkingDirectory)/03-Create-AKS-Cluster/stacks/tftec'
+          commandOptions: '-reconfigure'
+          backendType: 'azurerm'
+          backendServiceArm: 'tftec-devops'
+          backendAzureRmResourceGroupName: '$(TF-BACKEND-RESOURCE-GROUP)'
+          backendAzureRmStorageAccountName: '$(TF-BACKEND-STORAGE-ACCOUNT)'
+          backendAzureRmContainerName: '$(TF-BACKEND-CONTAINER)'
+          backendAzureRmKey: '$(TF-BACKEND-KEY)'
+          allowTelemetryCollection: true
+      - task: TerraformCLI@0
+        displayName: Terraform Validate
+        inputs:
+          command: 'validate'
+          workingDirectory: '$(System.DefaultWorkingDirectory)/03-Create-AKS-Cluster/stacks/tftec'
+          allowTelemetryCollection: true
+      - task: TerraformCLI@0
+        displayName: Terraform Format
+        inputs:
+          command: 'fmt'
+          wworkingDirectory: '$(System.DefaultWorkingDirectory)/03-Create-AKS-Cluster/stacks/tftec'
+          commandOptions: '-check -diff'
+          allowTelemetryCollection: true
 
   - job: Terraform_Plan
     dependsOn: Terraform_Validate
     displayName: Planejamento do Deploy
     steps:
-     - task: TerraformCLI@0
-       displayName: Terraform Init
-       inputs:
-         command: 'init'
-         workingDirectory: '$(System.DefaultWorkingDirectory)/stacks/tftec'
-         commandOptions: '-reconfigure'
-         backendType: 'azurerm'
-         backendServiceArm: 'tftec-devops'
-         backendAzureRmResourceGroupName: '$(TF-BACKEND-RESOURCE-GROUP)'
-         backendAzureRmStorageAccountName: '$(TF-BACKEND-STORAGE-ACCOUNT)'
-         backendAzureRmContainerName: '$(TF-BACKEND-CONTAINER)'
-         backendAzureRmKey: '$(TF-BACKEND-KEY)'
-         allowTelemetryCollection: true 
-     - task: TerraformCLI@0
-       displayName: Seleciona Workspace
-       inputs:
-         command: workspace
-         workingDirectory: '$(System.DefaultWorkingDirectory)/stacks/tftec'
-         workspaceSubCommand: select
-         workspaceName: prod
-     - task: TerraformCLI@0
-       displayName: Terraform Plan
-       inputs:
-         command: 'plan'
-         workingDirectory: '$(System.DefaultWorkingDirectory)/stacks/tftec'
-         environmentServiceName: 'tftec-devops'
-         commandOptions: '-out=main.tfplan -var-file=../env/prod/prod.tfvars'
-         allowTelemetryCollection: true
-         publishPlanResults: 'Terraform Plan' 
+      - task: TerraformCLI@0
+        displayName: Terraform Init
+        inputs:
+          command: 'init'
+          workingDirectory: '$(System.DefaultWorkingDirectory)/03-Create-AKS-Cluster/stacks/tftec'
+          commandOptions: '-reconfigure'
+          backendType: 'azurerm'
+          backendServiceArm: 'tftec-devops'
+          backendAzureRmResourceGroupName: '$(TF-BACKEND-RESOURCE-GROUP)'
+          backendAzureRmStorageAccountName: '$(TF-BACKEND-STORAGE-ACCOUNT)'
+          backendAzureRmContainerName: '$(TF-BACKEND-CONTAINER)'
+          backendAzureRmKey: '$(TF-BACKEND-KEY)'
+          allowTelemetryCollection: true 
+      - task: TerraformCLI@0
+        displayName: Seleciona Workspace
+        inputs:
+          command: workspace
+          workingDirectory: '$(System.DefaultWorkingDirectory)/03-Create-AKS-Cluster/stacks/tftec'
+          workspaceSubCommand: select
+          workspaceName: live
+      - task: TerraformCLI@0
+        displayName: Terraform Plan
+        inputs:
+          command: 'plan'
+          workingDirectory: '$(System.DefaultWorkingDirectory)/03-Create-AKS-Cluster/stacks/tftec'
+          environmentServiceName: 'tftec-devops'
+          commandOptions: '-out=main.tfplan -var-file=../env/aovivo-sp-24/aovivosp24.tfvars'
+          allowTelemetryCollection: true
+          publishPlanResults: 'Terraform Plan' 
 
 - stage: Validation
   dependsOn: "CI_Stage"

@@ -1,18 +1,18 @@
-# 2. Estrutura de pastas do Terraform
+# 2. Terraform folder structure
 
-Data: 2022-10-11
+Date: 2022-10-11
 
 ## Status
 
-Aceito
+Accepted
 
 ## Context
 
-Precisamos definir em um modelo que atenda a boas práticas de desenvolvimento de Infraestrutura como Código.
+We need to define a model that meets good Infrastructure as Code development practices.
 
 ## Decision
 
-O modelo definido está seguindo algumas premissas que são importantes serem esclarecidas:
+The defined model is following some premises that are important to be clarified:
 
 ```
 📦terraform (1)
@@ -55,54 +55,54 @@ O modelo definido está seguindo algumas premissas que são importantes serem es
 ```
 
 ### 1. terraform
-Esta pasta conterá todos os documentos relacionados ao Terraform.
+This folder will contain all the documents related to Terraform.
 
 ### 2. .devcontainer
 
-Para saber mais sobre essa feature acesse o link [VsCode Dev Container](https://code.visualstudio.com/docs/remote/create-dev-container)
+To learn more about this feature, access the link [VsCode Dev Container](https://code.visualstudio.com/docs/remote/create-dev-container)
 
-Este repositório possui uma definição de DevContainer permitindo uma mesma experiência para a ferramentas de denvolvimento utilizadas:
+This repository has a DevContainer definition that allows the same experience for the development tools used:
 - Terraform `[1.3.2]`
 - TFLint `[0.41.0]`
 - AZ Cli `[latest]`
 - Terraform-docs `[0.16.0]`
 
-> Nota: O uso do Dev Container não é mandatório
+> Note: The use of Dev Container is not mandatory
 
-Extensão:
+Extension:
 
-Caso deseja utilizar é necessário ter a seguinte extensão instalada no Visual Studio Code, além de possuir o [**Docker**](https://docs.docker.com/get-docker/). 
+If you want to use it, you must have the following extension installed in Visual Studio Code, in addition to having [**Docker**](https://docs.docker.com/get-docker/).
 
 [Remote Containers Extension](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers)
 
 ### 3. assets
 
-Esta pasta conterá todos as imagens relacionados ao projeto.
+This folder will contain all the images related to the project.
 
 ### 4. cicd
-Possui a estrutura de arquivos `.yml` que serão responsáveis pelos stages de CI e CD do ambiente. 
+It contains the `.yml` file structure that will be responsible for the CI and CD stages of the environment.
 
 ### 5. modules
-Contém a construção generalizada dos componentes a serem provisionados. Todos os códigos para criação da Infraestrutura como código serão provisionados reciclando os módulos aqui contidos. Mais informações sobre como funcionam os módulos no terraform podem ser consultadas [**clicando neste link**](https://www.terraform.io/docs/language/modules/develop/index.html).
+It contains the generalized construction of the components to be provisioned. All the codes for creating the Infrastructure as Code will be provisioned by recycling the modules contained here. More information about how modules work in Terraform can be found [**by clicking this link**](https://www.terraform.io/docs/language/modules/develop/index.html).
 
 ### 6. stacks
-Aqui vamos apresentar a estrutura de pastas que será usada para efetivamente realizar a criação do ambiente.
+Here we will present the folder structure that will be used to effectively create the environment.
 
 #### 6.1 env
-A pasta `env` possuirá os arquivos com variáveis de ambiente neste modelo: 
- - `dev.tfvars`
- - `prd.tfvars`
+The `env` folder will contain files with environment variables in this model:
+- `dev.tfvars`
+- `prd.tfvars`
 
-Estes arquivos serão consultados sob demanda através do pipeline de deployment.
+These files will be consulted on demand through the deployment pipeline.
 
-#### 6.2 stack1 
-As stacks são estruturas organizacionais que possuem a lógica de negócio usada para a construção do ambiente. Aqui é possível haver 1 ou mais diretórios cada um especificando uma estrutura organizacional independente.
+#### 6.2 stack1
+Stacks are organizational structures that contain the business logic used to build the environment. Here, there may be 1 or more directories, each specifying an independent organizational structure.
 
-> Não confundir o diretório **stack** com **env**
+> Do not confuse the **stack** directory with **env**
 
 ### 7. templates
-Aqui ficam armazenados todos os templates de referência usados para todos o ambiente. Aqui teremos liberdade de criar sub-diretórios que contenham os arquivos de template necessários para evitar a repetição de referências.
+Here, all reference templates used for the entire environment are stored. Here, we will have the freedom to create subdirectories that contain the necessary template files to avoid repeating references.
 
 ## Consequences
 
-Ao manter um modelo centralizado e padronizado de uso, o desenvolvimento se torna muito mais estruturado e claro. Caso um novo time assuma o desenvolvimento da infraestrutura, saberá claramente o propósito de cada um dos diretórios importantes deste projeto.
+By maintaining a centralized and standardized usage model, development becomes much more structured and clear. If a new team takes over the development of the infrastructure, they will clearly know the purpose of each of the important directories of this project.

@@ -32,13 +32,12 @@
 ## Deseja contribuir?
 
 Para contruibuir com este repositório você deve instalar o [**Terraform-docs**](https://terraform-docs.io/user-guide/installation/).
-Etapas:
-* Clone este repositório;
-* Crie uma branch;
-* Realize todas as modificações que deseja;
-* Faça o commit e crie uma tag (v1.1.0, v1.2.3, etc);
-* Documente o código usando `make all`;
-* Faça o push da sua branch seguido de um Pull Request.
+Etapas: 
+  * Clone este repositório;
+  * Crie uma branch;
+  * Realize todas as modificações que deseja;
+  * Faça o commit e crie uma tag (v1.1.0, v1.2.3, etc);
+  * Documente o código usando `make all`;
+  * Faça o push da sua branch seguido de um Pull Request.
 
-<sub>Para dúvidas mande um contato: [antonio.junior@solonetwork.com.br](mailto:antonio.junior@solonetwork.com.br)</sub>
-
+<sub>Para dúvidas mande um contato: [asilva@unicast.com.br](mailto:asilva@unicast.com.br)</sub>

@@ -25,6 +25,7 @@ data "azuread_client_config" "existing" {
 
 resource "azuread_group" "aks_administrators" {
   display_name            = "${var.aks_resource_group_name}-cluster-administrators"
+  owners                  = [data.azuread_client_config.existing.object_id]
   security_enabled        = true
   prevent_duplicate_names = true
   description             = "Azure AKS Kubernetes administrators for the ${var.aks_resource_group_name}-cluster."
@@ -187,12 +188,11 @@ module "aks" {
   node_av_zone           = var.aks_node_av_zone
   agents_type            = var.agents_type
   vm_size                = var.vm_size
-  enable_autoscaling     = var.aks_enable_autoscaling
+  os_sku                 = var.os_sku
+  auto_scaling_enabled   = var.auto_scaling_enabled
   default_node_settings  = var.aks_default_node_settings
   max_pods               = var.aks_max_pods
-  enable_node_public_ip  = var.enable_node_public_ip
   node_labels            = var.node_labels
-  enable_host_encryption = var.enable_host_encryption
   node_vm_disk_size      = var.aks_node_vm_disk_size
   ultra_ssd_enabled      = var.ultra_ssd_enabled
 
@@ -205,7 +205,8 @@ module "aks" {
   is_identity_enabled               = var.aks_is_identity_enabled
   role_based_access_control_enabled = var.role_based_access_control_enabled
   rbac_aad_managed                  = var.rbac_aad_managed
-  rbac_aad_admin_group_object_ids   = [azuread_group.aks_administrators.id]
+  rbac_aad_admin_group_object_ids   = [azuread_group.aks_administrators.object_id] # Use object_id
+
 
   # Network Configuration
   network_plugin                   = var.network_plugin
@@ -214,12 +215,9 @@ module "aks" {
   aks_network_cidr                 = var.default_aks_network_cidr
   node_subnet                      = var.aks_node_subnet
   aks_dns_ip                       = var.default_aks_dns_ip
-  aks_docker_bridge                = var.default_aks_docker_bridge
-  dns_prefix                       = var.dns_prefix
+  dns_prefix                        = var.dns_prefix
   lb_sku                           = var.lb_sku
   http_application_routing_enabled = var.http_application_routing_enabled
-  private_cluster_enabled          = var.private_cluster_enabled
-  api_server_authorized_ip_ranges  = var.api_server_authorized_ip_ranges
   network_policy                   = var.network_policy
 
   # Integrations Configuration

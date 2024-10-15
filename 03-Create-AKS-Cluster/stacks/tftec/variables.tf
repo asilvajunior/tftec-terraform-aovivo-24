@@ -92,7 +92,7 @@ variable "aks_default_node_settings" {
   description = "Configurações de `max_nodes` e `min_nodes` quando a opção `enable_autoscaling` está definida como `true`."
 }
 
-variable "aks_enable_autoscaling" {
+variable "auto_scaling_enabled" {
   type        = bool
   description = "Habilita ou não as opções de autoscaling do default node pool."
 }
@@ -100,11 +100,6 @@ variable "aks_enable_autoscaling" {
 variable "default_aks_network_cidr" {
   type        = string
   description = "Endereço CIDR da rede do Kubernetes Service."
-}
-
-variable "default_aks_docker_bridge" {
-  type        = string
-  description = "endereço CIDR para ser usado como Docker Bridge."
 }
 
 variable "default_aks_dns_ip" {
@@ -124,6 +119,7 @@ variable "aks_additional_node_pools" {
     additional_node_name           = string
     node_count                     = number
     vm_size                        = string
+    node_os_sku                    = string
     zones                          = list(string)
     max_pods                       = number
     os_disk_size                   = number
@@ -140,12 +136,6 @@ variable "aks_network_plugin" {
   type        = string
   default     = "azure"
   description = "Nome do Network plugin usado pelo Kubernetes Services. Use `azure` para a rede avançada (Azure CNI) ou `kubenet` para a rede básica."
-}
-
-variable "enable_node_public_ip" {
-  type        = bool
-  default     = false
-  description = "Habilita ou não se os nós devem ter um endereço IP público. Default é false."
 }
 
 variable "network_policy" {
@@ -184,12 +174,6 @@ variable "node_labels" {
   description = "Mapa de labels que será aplicada ao node Kubernetes."
 }
 
-variable "enable_host_encryption" {
-  type        = bool
-  default     = false
-  description = "Habilita criptografia no default node pool"
-}
-
 variable "ultra_ssd_enabled" {
   type        = bool
   default     = false
@@ -200,12 +184,6 @@ variable "private_cluster_enabled" {
   type        = bool
   default     = false
   description = "Habilita que o cluster teha suas APIs dipostas somente para a rede interna"
-}
-
-variable "api_server_authorized_ip_ranges" {
-  type        = set(string)
-  default     = null
-  description = "Range de IPs que são liberados para gerência dos server nodes."
 }
 
 variable "aks_code" {
@@ -237,6 +215,12 @@ variable "name_pool" {
 variable "vm_size" {
   type        = string
   description = "Size da VM do default node."
+}
+
+variable "os_sku" {
+  type        = string
+  default     = "AzureLinux"
+  description = "Os do sistema operional que será usado para os nós do cluster Kubernetes. Os valores possíveis são AzureLinux e AzureWindows"
 }
 
 variable "network_plugin" {

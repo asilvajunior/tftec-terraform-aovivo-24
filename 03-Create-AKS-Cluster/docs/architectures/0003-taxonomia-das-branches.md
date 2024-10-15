@@ -1,38 +1,38 @@
-# 3. Definição de taxonomia das branches
+# 3. Branch taxonomy definition
 
-Data: 2021-11-11
+Date: 2021-11-11
 
 ## Status
 
-Aceito
+Accepted
 
 ## Context
 
-Precisamos documentar a maneira na qual as branches do repositório serão criadas para deixar claro tudo o que foi trabalhado no repositório em relação ao projeto.
+We need to document the way in which the repository branches will be created to make clear everything that was worked on in the repository in relation to the project.
 
 ## Decision
 
-O padrão de nomeação das branches segue o modelo a seguir:
+The naming pattern for branches follows the following model:
 
-```<Tipo de Work Item>/<Id do Workitem>-<descricao>```
+```<Work Item Type>/<Workitem Id>-<description>```
 
-Para tanto o seguinte padrão será adotado, de acordo com os itens de trabalho existentes neste projeto: 
+For this purpose, the following pattern will be adopted, according to the existing work items in this project:
 
-|Work Item|Padrão de Branch|
+|Work Item|Branch Pattern|
 |--|--|
 |Feature|FT|
 |Backlog Item|BI|
 |Task|TK|
 |Bug|BG|
 
-Exemplos:
+Examples:
 
 - ```TK/1234-task-do-boards```
 <br>
 - ```BI/4321-backlog-item-do-boards```
 
-Nos exemplos acima, "TK" e "BI" representam os tipos de seus work items, sendo "Task" e "Backlog Item", respectivamente. Logo após, o número que representa o ID do work item pode ser visto acompanhado de sua respectiva descrição.
+In the examples above, "TK" and "BI" represent the types of their work items, being "Task" and "Backlog Item", respectively. Right after, the number that represents the ID of the work item can be seen accompanied by its respective description.
 
 ## Consequences
 
-Ao padronizar a forma como as branches serão criadas adotando a maneira proposta, tudo que foi feito no repositório em relação aos work items será facilmente identificável e claro.
+By standardizing the way branches will be created adopting the proposed method, everything that was done in the repository in relation to work items will be easily identifiable and clear.

@@ -32,12 +32,6 @@ variable "node_labels" {
   description = "Mapa de labels que será aplicada ao node Kubernetes."
 }
 
-variable "api_server_authorized_ip_ranges" {
-  type        = set(string)
-  default     = null
-  description = "Range de IPs que são liberados para gerência dos server nodes."
-}
-
 variable "only_critical_addons_enabled" {
   type        = bool
   default     = null
@@ -60,6 +54,12 @@ variable "sku_tier" {
   type        = string
   default     = "Free"
   description = "O nível de SKU que deve ser usado para este cluster Kubernetes. Os valores possíveis são Free e Paid"
+}
+
+variable "os_sku" {
+  type        = string
+  default     = "AzureLinux"
+  description = "Os do sistema operional que será usado para os nós do cluster Kubernetes. Os valores possíveis são AzureLinux e AzureWindows"
 }
 
 variable "vnet_resource_group_name" {
@@ -142,7 +142,7 @@ variable "default_node_settings" {
   description = "Configurações de `max_nodes` e `min_nodes` quando a opção `enable_autoscaling` está definida como `true`."
 }
 
-variable "enable_autoscaling" {
+variable "auto_scaling_enabled" {
   type        = bool
   default     = false
   description = "Habilita ou não as opções de autoscaling do default node pool."
@@ -151,11 +151,6 @@ variable "enable_autoscaling" {
 variable "aks_network_cidr" {
   type        = string
   description = "Endereço CIDR da rede do Kubernetes Service."
-}
-
-variable "aks_docker_bridge" {
-  type        = string
-  description = "Endereço CIDR para ser usado como Docker Bridge."
 }
 
 variable "aks_dns_ip" {
@@ -172,6 +167,7 @@ variable "additional_node_pools" {
     max_pods                       = number
     os_disk_size                   = number
     node_os                        = string
+    node_os_sku                    = string
     cluster_auto_scaling           = bool
     cluster_auto_scaling_min_count = number
     cluster_auto_scaling_max_count = number
@@ -191,12 +187,6 @@ variable "azure_policy_enabled" {
   type        = bool
   default     = false
   description = "Habilitar ou não o add-on de Azure Policy para Kubernetes."
-}
-
-variable "enable_host_encryption" {
-  type        = bool
-  default     = false
-  description = "Habilita criptografia no default node pool"
 }
 
 variable "http_application_routing_enabled" {
@@ -267,14 +257,8 @@ variable "aks_service_principal_client_secret" {
 
 variable "enable_attach_acr" {
   type        = bool
-  default     = false
+  default     = true
   description = "Força o attach ou não do Kubernetes Services com o Azure Container Services"
-}
-
-variable "enable_node_public_ip" {
-  type        = bool
-  default     = false
-  description = "Habilita ou não se os nós devem ter um endereço IP público. Default é false."
 }
 
 variable "acr_id" {

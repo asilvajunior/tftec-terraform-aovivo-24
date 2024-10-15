@@ -48,8 +48,8 @@
 | <a name="output_vnet_subnet_ids"></a> [vnet\_subnet\_ids](#output\_vnet\_subnet\_ids) | n/a |
 | <a name="output_vnet_subnet_names"></a> [vnet\_subnet\_names](#output\_vnet\_subnet\_names) | n/a |
 
-## Examples
-### Basic Virtual Network Example
+## Examples 
+### Basic Virtual Network Example 
 
 ``` hcl
 resource "random_pet" "pet" {
@@ -254,13 +254,12 @@ module "vnet-west" {
 ## Deseja contribuir?
 
 Para contruibuir com este repositório você deve instalar o [**Terraform-docs**](https://terraform-docs.io/user-guide/installation/).
-Etapas:
-* Clone este repositório;
-* Crie uma branch;
-* Realize todas as modificações que deseja;
-* Faça o commit e crie uma tag (v1.1.0, v1.2.3, etc);
-* Documente o código usando `make all`;
-* Faça o push da sua branch seguido de um Pull Request.
+Etapas: 
+  * Clone este repositório;
+  * Crie uma branch;
+  * Realize todas as modificações que deseja;
+  * Faça o commit e crie uma tag (v1.1.0, v1.2.3, etc);
+  * Documente o código usando `make all`;
+  * Faça o push da sua branch seguido de um Pull Request.
 
 <sub>Para dúvidas mande um contato: [antonio.junior@solonetwork.com.br](mailto:antonio.junior@solonetwork.com.br)</sub>
-

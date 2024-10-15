@@ -35,7 +35,6 @@ resource "azurerm_kubernetes_cluster" "aks" {
   local_account_disabled           = var.disable_local_account
   http_application_routing_enabled = var.http_application_routing_enabled
   private_cluster_enabled          = var.private_cluster_enabled
-  api_server_authorized_ip_ranges  = var.api_server_authorized_ip_ranges
   azure_policy_enabled             = var.azure_policy_enabled
   dns_prefix                       = var.dns_prefix
   tags                             = var.tags
@@ -46,13 +45,12 @@ resource "azurerm_kubernetes_cluster" "aks" {
     zones                  = var.node_av_zone
     type                   = var.agents_type
     vm_size                = var.vm_size
-    enable_auto_scaling    = var.enable_autoscaling
-    max_count              = var.enable_autoscaling == true ? lookup(var.default_node_settings, "max_count", null) : null
-    min_count              = var.enable_autoscaling == true ? lookup(var.default_node_settings, "min_count", null) : null
+    os_sku                 = var.os_sku
+    auto_scaling_enabled   = var.auto_scaling_enabled
+    max_count              = var.auto_scaling_enabled == true ? lookup(var.default_node_settings, "max_count", null) : null
+    min_count              = var.auto_scaling_enabled == true ? lookup(var.default_node_settings, "min_count", null) : null
     node_count             = lookup(var.default_node_settings, "node_count", var.node_vm_count)
-    enable_node_public_ip  = var.enable_node_public_ip
     node_labels            = var.node_labels
-    enable_host_encryption = var.enable_host_encryption
     os_disk_size_gb        = var.node_vm_disk_size
     ultra_ssd_enabled      = var.ultra_ssd_enabled
     vnet_subnet_id         = data.azurerm_subnet.aks_node.id
@@ -64,22 +62,10 @@ resource "azurerm_kubernetes_cluster" "aks" {
     content {
       admin_group_object_ids = var.rbac_aad_admin_group_object_ids
       azure_rbac_enabled     = var.rbac_aad_azure_rbac_enabled
-      managed                = true
       tenant_id              = var.rbac_aad_tenant_id
     }
   }
-  dynamic "azure_active_directory_role_based_access_control" {
-    for_each = var.role_based_access_control_enabled && !var.rbac_aad_managed ? ["rbac"] : []
-
-    content {
-      client_app_id     = var.rbac_aad_client_app_id
-      managed           = false
-      server_app_id     = var.rbac_aad_server_app_id
-      server_app_secret = var.rbac_aad_server_app_secret
-      tenant_id         = var.rbac_aad_tenant_id
-    }
-  }
-
+  
   dynamic "service_principal" {
     for_each = var.is_identity_enabled ? [] : [1]
     content {
@@ -112,7 +98,6 @@ resource "azurerm_kubernetes_cluster" "aks" {
     load_balancer_sku  = var.lb_sku
     network_policy     = var.network_policy
     service_cidr       = var.aks_network_cidr
-    docker_bridge_cidr = var.aks_docker_bridge
     dns_service_ip     = var.aks_dns_ip
   }
 }
@@ -135,11 +120,11 @@ resource "azurerm_kubernetes_cluster_node_pool" "aks" {
   max_pods              = each.value.max_pods != null ? each.value.max_pods : 60
   os_disk_size_gb       = each.value.os_disk_size
   os_type               = each.value.node_os
+  os_sku                = each.value.node_os_sku
   vnet_subnet_id        = data.azurerm_subnet.aks_node.id
-  enable_auto_scaling   = each.value.cluster_auto_scaling
+  auto_scaling_enabled  = each.value.cluster_auto_scaling
   min_count             = each.value.cluster_auto_scaling_min_count
   max_count             = each.value.cluster_auto_scaling_max_count
-  enable_node_public_ip = each.value.enable_public_ip
   tags                  = var.tags
 }
 
@@ -149,7 +134,7 @@ resource "azurerm_role_assignment" "attach_acr" {
   count = var.enable_attach_acr ? 1 : 0
 
   scope                            = var.acr_id
-  role_definition_name             = "AcrPull"
-  principal_id                     = data.azurerm_client_config.aks.object_id
+  role_definition_name              = "AcrPull"
+  principal_id                     = azurerm_kubernetes_cluster.aks.kubelet_identity[0].object_id
   skip_service_principal_aad_check = true
 }
