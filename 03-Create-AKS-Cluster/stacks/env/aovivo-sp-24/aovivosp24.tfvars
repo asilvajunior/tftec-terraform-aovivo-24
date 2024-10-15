@@ -10,11 +10,16 @@ global_tags = {
 
 #02 - RGs Vars
 aks_resource_group_name       = "kubernetes"
-network_resource_group_name   = "network"
 analytics_resource_group_name = "analytics"
 
 
-#03 - AKS Vars
+#03 - VNET Vars
+vnet_name                = "vnet-spoke-live-brazilsouth-001"
+vnet_resource_group_name = "rg-tftec-network-live"
+snet_name                = "snet-aks-brazilsouth-001"
+
+
+#04 - AKS Vars
 # Cluster Configuration
 aks_code        = "001"
 cluster_name    = "tftec"
@@ -68,7 +73,6 @@ aks_is_identity_enabled           = true
 # Network Configuration
 network_plugin                   = "azure"
 default_aks_network_cidr         = "11.0.0.0/22"
-aks_node_subnet                  = "snet-aks-brazilsouth-001"
 default_aks_dns_ip               = "11.0.0.10"
 dns_prefix                       = "tftec"
 lb_sku                           = "standard"
@@ -96,55 +100,3 @@ wks_log_tags = {
   "nome do aprovador"  = "Antonio Junior"
   "equipe"             = "NOC"
 }
-
-
-#04 - VNET Vars
-# VNET HUB
-vnet_code_hub     = "001"
-vnet_name_hub     = "hub"
-address_space_hub = ["10.0.0.0/20"]
-subnets_hub = {
-  snet-mgmt-brazilsouth-001 = {
-    address_prefix = "10.0.0.192/26"
-  }
-}
-# VNET SPOKE1
-vnet_code_spoke1     = "001"
-vnet_name_spoke1     = "spoke"
-address_space_spoke1 = ["10.1.0.0/20"]
-subnets_spoke1 = {
-  snet-aks-brazilsouth-001 = {
-    address_prefix = "10.1.0.0/22"
-  }
-}
-network_tags = {
-  "nome do aplicativo" = "network"
-  "centro de custo"    = "redes"
-  "nome do aprovador"  = "Antonio Junior"
-  "equipe"             = "redes"
-}
-
-
-#11 - NSG Vars
-# NSG HUB
-nsg_rules_hub = [
-  {
-    name                   = "allow_ssh_in"
-    priority               = 201
-    direction              = "Inbound"
-    destination_port_range = "22"
-    source_address_prefix  = "10.1.0.0/24"
-    description            = "allow-tftec-ssh"
-  }
-]
-# NSG SPOKE1
-nsg_rules_spoke1 = [
-  {
-    name                   = "allow_ssh_in"
-    priority               = 201
-    direction              = "Inbound"
-    destination_port_range = "22"
-    source_address_prefix  = "10.2.0.0/24"
-    description            = "allow-tftec-ssh"
-  }
-]

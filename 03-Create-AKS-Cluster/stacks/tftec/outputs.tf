@@ -4,10 +4,6 @@ output "aks_rg_name" {
   value = azurerm_resource_group.aks_rg.name
 }
 
-output "network_rg_name" {
-  value = azurerm_resource_group.network_rg.name
-}
-
 output "ananalytics_rg_name" {
   value = azurerm_resource_group.analytics_rg.name
 }

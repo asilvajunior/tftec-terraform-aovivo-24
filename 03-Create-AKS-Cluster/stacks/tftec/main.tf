@@ -1,21 +1,28 @@
 # Azure Resource Groups
 
 resource "azurerm_resource_group" "aks_rg" {
-  name     = "rg-${var.cx_prefix}-${var.aks_resource_group_name}-${terraform.workspace}"
-  location = var.location
-  tags     = var.global_tags
-}
-
-resource "azurerm_resource_group" "network_rg" {
-  name     = "rg-${var.cx_prefix}-${var.network_resource_group_name}-${terraform.workspace}"
+  name     = "rg-${var.cx_prefix}-${var.aks_resource_group_name}"
   location = var.location
   tags     = var.global_tags
 }
 
 resource "azurerm_resource_group" "analytics_rg" {
-  name     = "rg-${var.cx_prefix}-${var.analytics_resource_group_name}-${terraform.workspace}"
+  name     = "rg-${var.cx_prefix}-${var.analytics_resource_group_name}"
   location = var.location
   tags     = var.global_tags
+}
+
+# Data Sources
+
+data "azurerm_virtual_network" "existing_vnet" {
+  name                = var.vnet_name
+  resource_group_name = var.vnet_resource_group_name
+}
+
+data "azurerm_subnet" "existing_subnet" {
+  name                 = var.snet_name
+  virtual_network_name = data.azurerm_virtual_network.existing_vnet.name
+  resource_group_name  = data.azurerm_virtual_network.existing_vnet.resource_group_name
 }
 
 # Azure AD Group in Active Directory for AKS Admins
@@ -51,99 +58,12 @@ resource "azurerm_role_assignment" "aks_administrators" {
 
 # Terraform Modules
 
-# Azure Virtual Network Module
-
-module "vnet_hub" {
-  source = "../../modules/vnet"
-
-  resource_group_name = azurerm_resource_group.network_rg.name
-  location            = var.location
-  tags                = merge(var.global_tags, var.aks_tags)
-  vnet_name           = "vnet-${var.vnet_name_hub}-${terraform.workspace}-${var.location}-${var.vnet_code_hub}"
-  address_space       = var.address_space_hub
-  subnets             = var.subnets_hub
-  dns_servers         = var.dns_servers
-  nsg_ids = {
-    snet-mgmt-brazilsouth-001 = module.nsg_spoke1.nsg_id
-  }
-
-  vnet_peering_settings = {
-    "${var.vnet_name_hub}-to-${var.vnet_name_spoke1}-${var.vnet_code_spoke1}" = {
-      remote_vnet_id          = module.vnet_spoke1.vnet_id
-      allow_forwarded_traffic = true
-      allow_gateway_transit   = false
-      use_remote_gateways     = false
-    }
-  }
-
-  depends_on = [
-    azurerm_resource_group.network_rg,
-    module.nsg_hub
-  ]
-}
-
-module "vnet_spoke1" {
-  source = "../../modules/vnet"
-
-  resource_group_name = azurerm_resource_group.network_rg.name
-  location            = var.location
-  tags                = merge(var.global_tags, var.aks_tags)
-  vnet_name           = "vnet-${var.vnet_name_spoke1}-${terraform.workspace}-${var.location}-${var.vnet_code_spoke1}"
-  address_space       = var.address_space_spoke1
-  subnets             = var.subnets_spoke1
-  dns_servers         = var.dns_servers
-
-  vnet_peering_settings = {
-    "${var.vnet_name_spoke1}-${var.vnet_code_spoke1}-to-${var.vnet_name_hub}" = {
-      remote_vnet_id          = module.vnet_hub.vnet_id
-      allow_forwarded_traffic = true
-      allow_gateway_transit   = false
-      use_remote_gateways     = false
-    }
-  }
-
-  depends_on = [
-    azurerm_resource_group.network_rg,
-    module.nsg_spoke1
-  ]
-}
-
-# Network Security Groups Module
-
-module "nsg_hub" {
-  source = "../../modules/nsg"
-
-  resource_group_name = azurerm_resource_group.network_rg.name
-  location            = var.location
-  nsg_name            = "nsg-${var.vnet_name_spoke1}-${terraform.workspace}-${var.location}-${var.vnet_code_spoke1}"
-  tags                = merge(var.global_tags, var.network_tags)
-  rules               = var.nsg_rules_hub
-
-  depends_on = [
-    azurerm_resource_group.network_rg
-  ]
-}
-
-module "nsg_spoke1" {
-  source = "../../modules/nsg"
-
-  resource_group_name = azurerm_resource_group.network_rg.name
-  location            = var.location
-  nsg_name            = "nsg-${var.vnet_name_hub}-${terraform.workspace}-${var.location}-${var.vnet_code_hub}"
-  tags                = merge(var.global_tags, var.network_tags)
-  rules               = var.nsg_rules_spoke1
-
-  depends_on = [
-    azurerm_resource_group.network_rg
-  ]
-}
-
 # Azure Container Registry Module
 
 module "acr" {
   source = "../../modules/acr"
 
-  acr_name            = "ACR${terraform.workspace}${var.acr_name}${var.location}"
+  acr_name            = "ACR${var.acr_name}${var.location}"
   enable_admin        = var.acr_enable_admin
   resource_group_name = azurerm_resource_group.aks_rg.name
   location            = var.location
@@ -159,7 +79,7 @@ module "acr" {
 module "wks_log" {
   source = "../../modules/log_analytics"
 
-  log_analytics_workspace_name = "wkslog-${var.log_analytics_workspace_name}-${terraform.workspace}-${var.location}"
+  log_analytics_workspace_name = "wkslog-${var.log_analytics_workspace_name}-${var.location}"
   resource_group_name          = azurerm_resource_group.analytics_rg.name
   location                     = var.location
   tags                         = merge(var.global_tags, var.wks_log_tags)
@@ -177,7 +97,7 @@ module "aks" {
 
   # Cluster Configuration
   resource_group_name = azurerm_resource_group.aks_rg.name
-  cluster_name        = "aks-${var.cluster_name}-${terraform.workspace}-${var.location}-${var.aks_code}"
+  cluster_name        = "aks-${var.cluster_name}-${var.location}-${var.aks_code}"
   location            = var.location
   sku_tier            = var.sku_tier
   k8s_version         = var.aks_k8s_version
@@ -210,10 +130,10 @@ module "aks" {
 
   # Network Configuration
   network_plugin                   = var.network_plugin
-  vnet_name                        = module.vnet_spoke1.vnet_name
-  vnet_resource_group_name         = azurerm_resource_group.network_rg.name
+  vnet_name                        = data.azurerm_virtual_network.existing_vnet.name
+  vnet_resource_group_name         = data.azurerm_virtual_network.existing_vnet.resource_group_name
   aks_network_cidr                 = var.default_aks_network_cidr
-  node_subnet                      = var.aks_node_subnet
+  node_subnet                      = data.azurerm_subnet.existing_subnet.name
   aks_dns_ip                       = var.default_aks_dns_ip
   dns_prefix                       = var.dns_prefix
   lb_sku                           = var.lb_sku
@@ -232,7 +152,6 @@ module "aks" {
     module.acr,
     module.wks_log,
     azurerm_resource_group.aks_rg,
-    module.vnet_spoke1,
     azuread_group.aks_administrators
   ]
 }
