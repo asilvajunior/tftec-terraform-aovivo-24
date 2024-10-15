@@ -9,3 +9,5 @@ This repository is part of the presentation **"TFTEC AO VIVO EM SÃO PAULO 2024"
 Before deploying an Azure Kubernetes Services Cluster via Terraform IaC, you need to prepare the environment so that Azure DevOps (Pipelines) can communicate and create the resources in the real environment.
 
 Access and follow this how-to: 
+
+- [Landing Zone Azure DevOps Steps](https://github.com/asilvajunior/tftec-terraform-aovivo-24/blob/main/02-Create-ADO-Pipelines/Landing_Zone_ADO.txt)
