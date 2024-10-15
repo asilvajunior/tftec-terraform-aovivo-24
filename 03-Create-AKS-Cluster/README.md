@@ -21,4 +21,8 @@ After that, make sure to make the necessary changes to the variables file to be 
 
 - [Environment variables for the project](https://github.com/asilvajunior/tftec-terraform-aovivo-24/blob/main/03-Create-AKS-Cluster/stacks/env/aovivo-sp-24/aovivosp24.tfvars)
 
+## :memo: License
+
+This project is under [MIT License](./LICENSE).
+
 
