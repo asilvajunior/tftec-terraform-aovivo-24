@@ -19,6 +19,6 @@ Before deploying resources via Terraform IaC, you need to prepare the environmen
 
 After that, make sure to make the necessary changes to the variables file to be deployed for this project:
 
-- [Environment variables for the project]()
+- [Environment variables for the project](https://github.com/asilvajunior/tftec-terraform-aovivo-24/tree/main/03-Create-AKS-Cluster/stacks/env)
 
 
