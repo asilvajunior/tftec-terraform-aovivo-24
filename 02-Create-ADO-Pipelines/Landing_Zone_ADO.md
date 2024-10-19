@@ -35,7 +35,7 @@ https://marketplace.visualstudio.com/items?itemName=JasonBJohnson.azure-pipeline
 
 Install the extension in your project, click **Get it free** > select the Azure DevOps organization and install it.
 
-### 6. Adjusting service connection permissions (Subscription and Microsoft Graph).
+### 7. Adjusting service connection permissions (Subscription and Microsoft Graph).
 
 Click on Manage service connection roles > add the service connection as **Owner** in the subscription.
 
