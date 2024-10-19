@@ -2,7 +2,7 @@
 stages:
 - stage: CI_Stage
   variables:
-    - group: tftec-vars
+    - group: tftec-iac-vars
   displayName: Continuous Integration
   jobs:
   - job: Terraform_Init
@@ -91,7 +91,7 @@ stages:
   dependsOn: "CI_Stage"
   displayName: "Approval Gates"
   variables:
-    - group: tftec-vars
+    - group: tftec-iac-vars
   jobs: 
   - job: EsperaPorValidacao
     displayName: "Esperando aprovação manual"
