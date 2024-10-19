@@ -5,11 +5,6 @@ variable "aks_resource_group_name" {
   description = "O nome do seu Resource Group do cluster AKS."
 }
 
-variable "network_resource_group_name" {
-  type        = string
-  description = "O nome do seu Resource Group de Network."
-}
-
 variable "analytics_resource_group_name" {
   type        = string
   description = "O nome do seu Resource Group de Log Analytics."
@@ -50,12 +45,6 @@ variable "aks_tags" {
   description = "Mapa de caracteres identificando através de `chave = valor` quais são os rótulos do recursos aks."
 }
 
-variable "network_tags" {
-  type        = map(any)
-  default     = {}
-  description = "Mapa de caracteres identificando através de `chave = valor` quais são os rótulos do recursos network."
-}
-
 # ACR Vars
 
 variable "acr_name" {
@@ -69,11 +58,6 @@ variable "acr_enable_admin" {
 }
 
 # AKS Vars
-
-variable "aks_node_subnet" {
-  type        = string
-  description = "Subnet do default node."
-}
 
 variable "aks_k8s_version" {
   type        = string
@@ -338,66 +322,19 @@ variable "log_retention_in_days" {
   description = "Define o número de dias em que os logs serão armazenados no Workspace."
 }
 
-# Virtual Network Vars
+# VNET Vars
 
-variable "vnet_code_hub" {
+variable "vnet_name" {
   type        = string
-  description = "Número da rede HUB no ambiente."
+  description = "Nome da VNET."
 }
 
-variable "vnet_code_spoke1" {
+variable "vnet_resource_group_name" {
   type        = string
-  description = "Número da rede spoke1 no ambiente."
+  description = "Nome do Resource Group da VNET."
 }
 
-variable "vnet_name_hub" {
+variable "snet_name" {
   type        = string
-  description = "Nome da Rede hub a ser consumida pelo ambiente."
-}
-
-variable "vnet_name_spoke1" {
-  type        = string
-  description = "Nome da Rede spoke1 a ser consumida pelo ambiente."
-}
-
-variable "address_space_hub" {
-  type        = list(string)
-  description = "Lista de todos os address spaces que serão usados pela rede hub."
-}
-
-variable "address_space_spoke1" {
-  type        = list(string)
-  description = "Lista de todos os address spaces que serão usados pela rede spoke1."
-}
-
-variable "subnets_hub" {
-  type        = any
-  default     = {}
-  description = "Todos os detalhes sobre a sub-rede que será criada na rede HUB."
-}
-
-variable "subnets_spoke1" {
-  type        = any
-  default     = {}
-  description = "Todos os detalhes sobre a sub-rede que será criada na rede spoke1"
-}
-
-variable "dns_servers" {
-  type        = list(string)
-  default     = []
-  description = "Os servidores DNS a serem usados com a vnet. Omitir ou deixar este campo em branco fará com que o recurso use o DNS padrão do Azure"
-}
-
-# NSG Vars
-
-variable "nsg_rules_hub" {
-  type        = any
-  default     = []
-  description = "Security rules for the network security group using this format name = [priority, direction, access, protocol, source_port_range, destination_port_range, source_address_prefix, destination_address_prefix, description]"
-}
-
-variable "nsg_rules_spoke1" {
-  type        = any
-  default     = []
-  description = "Security rules for the network security group using this format name = [priority, direction, access, protocol, source_port_range, destination_port_range, source_address_prefix, destination_address_prefix, description]"
+  description = "Nome da Subnet."
 }
