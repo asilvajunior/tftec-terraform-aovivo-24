@@ -1,7 +1,7 @@
 stages:        
 - stage: Destroy_Stage
   variables:
-    - group: tftec-vars
+    - group: tftec-iac-vars
   displayName: Destruição da Infraestrutura
   jobs:  
   - job: Destroy
