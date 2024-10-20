@@ -20,9 +20,9 @@ This repository is part of the presentation **"TFTEC AO VIVO EM SÃO PAULO 2024"
 
 - [Azure Kubernetes Service with Azure DevOps and Terraform](https://github.com/asilvajunior/tftec-terraform-aovivo-24)
 
----
-
 >NOTE: If you do not have Azure CLI and Terraform installed on your machine, follow these steps:
+
+## Step-03: Install Tools
 
 **Linux Way**
 
