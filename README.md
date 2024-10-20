@@ -8,6 +8,8 @@ This repository is part of the presentation **"TFTEC AO VIVO EM SÃO PAULO 2024"
 
 1. Azure Cloud Subscription
 2. Course Github Repositories
+3. Azure CLI
+4. Terraform
 
 ## Step-01: Azure Cloud Subscription
 
