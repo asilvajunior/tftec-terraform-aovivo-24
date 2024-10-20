@@ -44,7 +44,7 @@ $env:KEY_VAULT_NAME="kv-tftec24aovivo"
 $env:ARM_TENANT_ID="49395d14-0a8b-4fec-a4ff-05f54c7213b7"
 ```
 
-### Access key from the storage account backend for Terraform
+### Access key from storage account backend Terraform (apply after you have the storage account created)
 ```powershell
 $env:ACCESS_KEY=$(az storage account keys list --resource-group $env:TF_BACKEND_RESOURCE_GROUP --account-name $env:TF_BACKEND_STORAGE_ACCOUNT --query "[0].value" --output tsv)
 ```
@@ -72,11 +72,6 @@ az storage container create --name $env:TF_BACKEND_CONTAINER --account-name $env
 ### Create the Key Vault
 ```powershell
 az keyvault create --name $env:KEY_VAULT_NAME --resource-group $env:TF_BACKEND_RESOURCE_GROUP --location $env:TF_BACKEND_LOCATION --enable-rbac-authorization $false
-```
-
-### Ensure access to Key Vault
-```powershell
-az keyvault set-policy --name $env:KEY_VAULT_NAME --object-id $env:ARM_CLIENT_ID --secret-permissions get list --key-permissions get list --certificate-permissions get list
 ```
 
 ### Create secrets for all environment variables in the Key Vault

@@ -44,7 +44,7 @@ export KEY_VAULT_NAME=kv-tftec24aovivo
 export ARM_TENANT_ID=49395d14-0a8b-4fec-a4ff-05f54c7213b7
 ```
 
-### Access key from storage account backend Terraform
+### Access key from storage account backend Terraform (apply after you have the storage account created)
 ```bash
 export ACCESS_KEY=$(az storage account keys list --resource-group $TF_BACKEND_RESOURCE_GROUP --account-name $TF_BACKEND_STORAGE_ACCOUNT --query "[0].value" --output tsv)
 ```
@@ -78,12 +78,7 @@ az storage container create --name $TF_BACKEND_CONTAINER --account-name $TF_BACK
 az keyvault create --name $KEY_VAULT_NAME --resource-group $TF_BACKEND_RESOURCE_GROUP --location $TF_BACKEND_LOCATION --enable-rbac-authorization false
 ```
 
-### 6. Ensure access to the key vault
-```bash
-az keyvault set-policy --name $KEY_VAULT_NAME --object-id $ARM_CLIENT_ID --secret-permissions get list --key-permissions get list --certificate-permissions get list
-```
-
-### 7. Create secrets for all environment variables in the key vault
+### 6. Create secrets for all environment variables in the key vault
 ```bash
 az keyvault secret set --vault-name $KEY_VAULT_NAME --name "TF-BACKEND-STORAGE-ACCOUNT" --value $TF_BACKEND_STORAGE_ACCOUNT
 az keyvault secret set --vault-name $KEY_VAULT_NAME --name "TF-BACKEND-KEY" --value $TF_BACKEND_KEY
@@ -93,7 +88,7 @@ az keyvault secret set --vault-name $KEY_VAULT_NAME --name "TF-BACKEND-RESOURCE-
 az keyvault secret set --vault-name $KEY_VAULT_NAME --name "TF-BACKEND-CONTAINER" --value $TF_BACKEND_CONTAINER
 ```
 
-### 8. Terraform initialization with backend configuration
+### 7. Terraform initialization with backend configuration
 ```bash
 terraform init -reconfigure \
   -backend-config "resource_group_name=$TF_BACKEND_RESOURCE_GROUP" \
