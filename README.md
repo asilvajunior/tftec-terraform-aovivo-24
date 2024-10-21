@@ -18,7 +18,7 @@ This repository is part of the presentation **"TFTEC AO VIVO EM SÃO PAULO 2024"
 
 ## Step-02: Fork Course Github Repositories
 
-- [Azure Kubernetes Service with Azure DevOps and Terraform](https://github.com/asilvajunior/tftec-terraform-aovivo-24)
+- [Azure Kubernetes Service with Azure DevOps and Terraform](https://github.com/asilvajunior/tftec-terraform-aovivo-24-iac)
 
 >NOTE: If you do not have Azure CLI and Terraform installed on your machine, follow these steps:
 
